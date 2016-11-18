@@ -43,7 +43,7 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>Responsive images</h1>
+					<h1>Grunt vs Gulp and friends</h1>
 					<p>
 						<small>Keith Gunn / <a href="http://twitter.com/gunn_x">@gunn_x</a></small>
 					</p>
@@ -54,106 +54,182 @@
 				</section>
 
 				<section>
-					<p>The basic way to add an image to the page</p>
-
-					<pre><code class="code-padding" data-trim>
-						<img src="http://placehold.it/300x250" width="300" height="250"/>
-					</code></pre>
-					<hr class="divider-rule"/>
-					<p><a href="demo-1.html" target="_blank">Demo</a></p>
-
-				</section>
-
-				<section>
-					<p><code>&lt;img&gt;</code> was ok for this</p>
-					<img class="fragment" src="img/desktop.jpg" alt="Desktop pc"/>
-				</section>
-
-				<section>
-					<h2>Why do we need something new?</h2>
-					<p class="fragment">Because now we are designing for this...</p>
-					<figure class="fragment">
-						<img class="grow" src="img/lukew.jpg" alt="LukeW" height="350" />
-						<!--<img class="grow" src="img/real-web.jpg" alt="The real web"/>-->
-						<figcaption><small><em>https://www.flickr.com/photos/lukew/7382570546/</em></small></figcaption>
-					</figure>
-				</section>
-
-				<section>
-					<h2>Responsive first step</h2>
-					<p>By using CSS we can achieve very basic responsive image</p>
-
-					<pre><code class="code-padding" data-trim>
-img { 
-  max-width: 100%;
-}
-					</code></pre>
-					<hr class="divider-rule"/>
-					<p><a href="demo-2.html" target="_blank">Demo</a></p>
-
-					<p class="fragment">The image resizes with the viewport but we are still loading the same resource regardless of device</p>
-
-				</section>
-
-				<section>
-					<h2>CSS solution</h2>
-					<p>For background images we can use media queries to decide which image to load</p>
-
-					<pre><code data-trim>
-body { 
-  background-image: url(bg-small);
-}
-
-@media (min-width: 320px) {
-  body {
-    background-image: url(bg-medium);
-  }
-}
-
-@media (min-width: 550px) {
-  body {
-    background-image: url(bg-large);
-  }
-}
-					</code></pre>
-
-					<p>The browser will only load the image that matches</p>
-					<hr class="divider-rule"/>
-					<p><a href="demo-3.html" target="_blank">Demo</a></p>
-
-				</section>
-
-				<section>
-					<h2>Content images</h2>
-					<p>We need a different solution here, developers looked first to JavaScript</p>
-					<hr class="divider-rule"/>
-					<p>Enhanced the <code>&lt;img&gt;</code> tag using <em>data</em> attribute</p>
-
-					<pre><code class="code-padding" data-trim>
-<img src="small.jpg" data-hisrc="large.jpg"/>
-					</code></pre>
-
-					<p>Small piece of JavaScript to swap out images</p>
-
-					<pre><code class="code-padding" data-trim>
-$('img').each(function () {
-  var hisrc = $(this).data('hisrc');
-  if (hisrc && hisrc !== $(this).attr('src') && $(this).is(':visible')) {
-    $(this).attr('src', hisrc);
-  }
-});
-					</code></pre>
-
-					<div class="fragment fade-in">
-						<p class="fragment grow highlight-red">Issue: Browsers will pre-fetch, so double download!</p>
+					<h2>Why do we need build tools?</h2>
+					<img src="https://media3.giphy.com/media/Msh39uPhPKda/200.gif" class="fragment stretch">
+					<div class="fragment">
+					  <p>Automate the repetitive stuff</p>
+					  
+					  <hr class="divider-rule"/>
 					</div>
 				</section>
 
 				<section>
-					<h2>Two solutions arrive at once</h2>
-					<h4 class="fragment"><code>&lt;picture&gt;</code></h4>
-					<h4 class="fragment"><code>&lt;img&gt;</code> with <em>srcset/sizes</em></h4>
+					<p>Some of the tasks we need to do</p>
+					<ul>
+							<li>Concatanate/copy files</li>
+							<li>Minification</li>
+							<li>Image optimisation</li>
+							<li>CSS/JS processing</li>
+							<li>Testing</li>
+              <li>Archiving</li>
+							<li>and many more....</li>
+						</ul>
 				</section>
+
+				<section>
+					<h2>Grunt.JS</h2>
+					<p class="fragment">Node based task runner</p>
+					<figure class="fragment">
+						<img class="grow" src="img/gruntjs.png" alt="GruntJS task runner" />
+						<figcaption><small><em><a href="http://gruntjs.com">gruntjs.com</a></em></small></figcaption>
+					</figure>
+					<hr class="divider-rule fragment"/>
+					<pre class="fragment"><code class="code-padding" data-trim>
+$ npm install -g grunt-cli
+					</code></pre>
+				</section>
+
+				<section>
+					<p>Tasks are configured in JSON</p>
+					<pre><code class="code-padding" data-trim style="max-height:auto">
+module.exports = function(grunt) {
+
+  // Project configuration.
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    uglify: {
+      options: {
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+      },
+      build: {
+        src: 'src/<%= pkg.name %>.js',
+        dest: 'build/<%= pkg.name %>.min.js'
+      }
+    }
+  });
+
+  // Load the plugin that provides the "uglify" task.
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+
+  // Default task(s).
+  grunt.registerTask('default', ['uglify']);
+};
+					</code></pre>
+					<p class="fragment">Demo</p>
+				</section>
+        
+        <section>
+					<h3>Plugins installed with npm</h3>
+          <p>Minifiy JavaScript</p>
+					<pre><code class="code-padding" data-trim>
+npm install grunt-contrib-uglify --save
+					</code></pre>
+          <p>Delete files and directories</p>
+          <pre><code class="code-padding" data-trim>
+npm install grunt-contrib-clean --save
+					</code></pre>
+          <p>Concateate files</p>
+          <pre><code class="code-padding" data-trim>
+npm install grunt-contrib-concat --save
+					</code></pre>
+          <p>...</p>
+				</section>
+
+				<section>
+				  <h2>Gulp</h2>
+				  <p class="fragment">Node based task runner</p>
+					<figure class="fragment">
+						<img class="grow" src="img/gulp.png" alt="GulpHJS task runner" />
+						<figcaption><small><em><a href="http://gulpjs.com">gulpjs.com</a></em></small></figcaption>
+					</figure>
+					<hr class="divider-rule fragment"/>
+					<pre class="fragment"><code class="code-padding" data-trim>
+$ npm install -g gulp-cli
+					</code></pre>
+				</section>
+
+				<section>
+				  <h2>Gulp</h2>
+					<p>Tasks are configured in code</p>
+					<pre><code class="code-padding" data-trim>
+var gulp = require('gulp');
+var uglify = require('gulp-uglify');
+ 
+gulp.task('compress', function() {
+  return gulp.src('src/*.js')
+    .pipe(uglify())
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('default', ['compress']);
+					</code></pre>
+          <p>Use node <i>require</i> to load modules</p>
+				</section>
+
+				<section>
+					<h2>Gulp</h2>
+				  <p class="fragment">Uses node streams to avoid writing files to disk, you can <em>pipe</em> between tasks</p>
+				  <p class="fragment">This means it is much faster than Grunt</p>
+          <hr class="fragment divider-rule"/>
+          <p class="fragment">Demo</p>
+				</section>
+
+				<section>
+					<h2>Comparison</h2>
+				  <p>&nbsp;</p>
+					<div class="row">
+					  <div class="col">
+					    <center><img src="img/gulp.png" height="75" class="img-plain"></center>
+					  	<h3>Gulp</h3>
+							<ul>
+								<li>Faster because of streams</li>
+								<li>1,916+ plugins</li>
+								<li>Code over configure</li>
+								<li>Shorter files</li>
+							</ul>
+						</div>
+						<div class="col col-half">
+						  <center><img src="img/gruntjs.png" height="75" class="img-plain"></center>
+							<h3>Grunt</h3>
+							<ul>
+								<li>Huge community</li>
+								<li>5,500+ plugins</li>
+								<li>Been around longer</li>
+								<li>Used in big production sites</li>
+							</ul>
+						</div>
+					</div>
+
+				</section>
+
+			
+
+				<section>
+					<h2>Which one?</h2>
+					<p class="fragment">It depends....</p>
+					<ul>
+					  <li class="fragment">Size of project - Gulp suits smaller projects</li>
+					  <li class="fragment">Want a faster build use Gulp
+							<ul class="fragment"><li>But...Grunt next version to include streams</li></ul>
+					  </li>
+					  <li class="fragment">Preference of code, JSON configs can be harder to read as project grows
+							<ul class="fragment"><li>There are ways to split up tasks to ease this in Grunt</li></ul>
+					  </li>
+					  <li class="fragment">Plugins - Grunt has more but both communities well supported
+		      </ul>
+				</section>
+        
+        <section>
+          <h1>&lt;/talk&gt;</h1>
+        </section>
+        
+        <section>
+      
+				<p><img src="img/hazquestion.jpg" alt="Questions" style="height:500px"/></p>
+				<p>
+					<small><a href="https://github.com/gunnx/slides/tree/master/grunt-vs-gulp">Slides (Github)</a></small>
+				</p>
+        </section>
 
 				<section>
 					<section>

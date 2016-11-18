@@ -43,7 +43,7 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>Responsive images</h1>
+					<h1>React Native</h1>
 					<p>
 						<small>Keith Gunn / <a href="http://twitter.com/gunn_x">@gunn_x</a></small>
 					</p>
@@ -54,74 +54,112 @@
 				</section>
 
 				<section>
-					<p>The basic way to add an image to the page</p>
-
-					<pre><code class="code-padding" data-trim>
-						<img src="http://placehold.it/300x250" width="300" height="250"/>
-					</code></pre>
-					<hr class="divider-rule"/>
-					<p><a href="demo-1.html" target="_blank">Demo</a></p>
-
-				</section>
-
-				<section>
-					<p><code>&lt;img&gt;</code> was ok for this</p>
-					<img class="fragment" src="img/desktop.jpg" alt="Desktop pc"/>
-				</section>
-
-				<section>
-					<h2>Why do we need something new?</h2>
-					<p class="fragment">Because now we are designing for this...</p>
-					<figure class="fragment">
-						<img class="grow" src="img/lukew.jpg" alt="LukeW" height="350" />
-						<!--<img class="grow" src="img/real-web.jpg" alt="The real web"/>-->
-						<figcaption><small><em>https://www.flickr.com/photos/lukew/7382570546/</em></small></figcaption>
-					</figure>
-				</section>
-
-				<section>
-					<h2>Responsive first step</h2>
-					<p>By using CSS we can achieve very basic responsive image</p>
-
-					<pre><code class="code-padding" data-trim>
-img { 
-  max-width: 100%;
-}
-					</code></pre>
-					<hr class="divider-rule"/>
-					<p><a href="demo-2.html" target="_blank">Demo</a></p>
-
-					<p class="fragment">The image resizes with the viewport but we are still loading the same resource regardless of device</p>
+					<ul>
+          <li>JavaScript framework based on React for building mobile user interfaces</li>
+          <li>Built by FaceBook</li>
+          <li>Write JavaScript but target native platform not browser</li>
+          <li>Currently supports iOS and Android, future platforms to be supported</li>
+          </ul>
 
 				</section>
 
 				<section>
-					<h2>CSS solution</h2>
-					<p>For background images we can use media queries to decide which image to load</p>
+					<h2>Advantages of <br/>React Native</h2>
+          <ul>
+            <li>Invokes native rendering APIs, no webviews!</li>
+            <li>Performance exactly same as native</li>
+            <li>Exposes interfaces to platform APIs like phone camera, users location...</li>
+            <li>Runs independent of the main UI thread so UI updates won't affect application performance</li>
+          </ul>
 
+				</section>
+
+        <section>
+          <h2>Advantages of <br/>React Native (cont.)</h2>
+          <ul>
+            <li>No need to rebuild application, you refresh just like a web page</li>
+            <li>Can debug using browser developer tools</li>
+            <li>No need to learn Xcode!</li>
+            <li>Apple allow JavaScript updates with no additional review cycle</li>
+            <li>Sharing code between platforms</li>
+          </ul>
+
+        </section>
+
+				<section>
+					<h2>Disadvantages of <br/>React Native</h2>
+					<ul>
+            <li>Still relatively new, iOS support March 2015, Android September 2015</li>
+            <li>Some features on iOS/Android still not supported</li>
+            <li>Active community but no clear standard practices</li>
+            <li>It's an abstraction to native so there will be issues!</li>
+				</section>
+
+				<section>
+					<h2>How does it work?</h2>
+          <h3>Virtual DOM</h3>
+					<ul>
+            <li>As direct DOM manipulation is expensive, React uses in-memory version of the DOM</li>
+            <li>As state changes, it diffs and then updates DOM directly
+            <li>This abstraction can also help 'bridge' between Native components</li>
+          </ul>
+          <img src="img/virtualdom.png" height="300" />
+        </section>
+
+        <section>
+          <h2>How does it work</h2>
+          <ul>
+            <li>With the web a React component would return HTML e.g. &lt;div&gt;, &lt;span&gt;, with a React Native you would return a &lt;View&gt; component it would be converted into a native component i.e. <b>iOS UIView</b></li>
+          </ul>
+				</section>
+
+				<section>
+					<h2>Creating components</h2>
+          <ul>
+            <li>Style and logic is all contained in same file</li>
+					  <li>JSX is used to write our views, an XML based language</li>
+          </ul>
+          <p>
 					<pre><code data-trim>
-body { 
-  background-image: url(bg-small);
-}
-
-@media (min-width: 320px) {
-  body {
-    background-image: url(bg-medium);
+var Hello = React.createClass({
+  render: function() {
+    return &lt;Text&gt;Hello {this.props.name}&lt;/Text&gt;;
   }
-}
+});
 
-@media (min-width: 550px) {
-  body {
-    background-image: url(bg-large);
-  }
-}
+React.render(&lt;Hello name="World" /&gt;, node);
 					</code></pre>
-
-					<p>The browser will only load the image that matches</p>
-					<hr class="divider-rule"/>
-					<p><a href="demo-3.html" target="_blank">Demo</a></p>
-
+          </p>
 				</section>
+
+        <section>
+          <h2>Styling components</h2>
+          <ul>
+            <li>React Native has a standardised subset of CSS</li>
+            <li>Mostly focused on layout</li>
+            <li>Consistent CSS support across platforms</li>
+            <li>CSS is defined via JavaScript objects</li>
+            <li>Styling is defined 'inline'</li>
+          </ul>
+          <pre><code data-trim>
+var style = {
+  backgroundColor: '#f00';
+  color: '#fff';
+  fontSize: '16px'
+}
+
+var foo = (
+  <Text style={style}>
+    I'm white text on a red background
+  </Text>);
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Demo</h2>
+          <h3>Weather app</h3>
+          <p>Simple app that asks user to enter Postcode and return weather for that area</p>
+        </section>
 
 				<section>
 					<h2>Content images</h2>

@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js - The HTML Presentation Framework</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/tesco.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>ES6</h1>
+					<p>
+						<small>Keith Gunn / <a href="http://twitter.com/gunn_x">@gunn_x</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h1>&lt;talk&gt;</h1>
+				</section>
+
+				<section>
+          <img src="img/js-logo.png"/>
+					<ul class="list-spaced">
+          <li class="fragment">6th edition of ECMAScript</li>
+          <li class="fragment">Also known as ES2015</li>
+          <li class="fragment">Major update to syntax for writing complex applications</li>
+          <li class="fragment">Not full browser support yet so being transpiled to ES5 (via Babel)</li>
+          </ul>
+
+				</section>
+
+				<section>
+					<h2>New variable scoping</h2>
+          <ul class="list-spaced">
+          <li>Keywords: <code class="invert">let</code> and <code class="invert">const</code></li>
+          <li>Original <code class="invert">var</code> had function scope only</li>
+          <li><code class="invert">let</code> and <code class="invert">const</code> now have block scope</li>
+          <li><code class="invert">let</code> is for variables that you plan to modify</li>
+          <li><code class="invert">const</code> cannot be redeclared but does not mean immutable</li>
+          </ul>
+				</section>
+
+        <section>
+          <h2>New variable scoping</h2>
+          <pre><code data-trim>
+const foo = {"name": "Andy", "age": 34};
+let bar = 10;
+
+if (foo === 10) {
+  let bar = 20;
+}
+
+foo.age = 35;
+console.log(bar); // outputs 10
+console.log(foo); // outputs {"name": "Andy", "age": 35}
+          </code></pre>
+
+        </section>
+
+				<section>
+					<h2>Arrow functions</h2>
+          <p>Improve writing of functions, especially callbacks</p>
+					<ul>
+            <li>Concise syntax</li>
+            <li>Binds <code class="invert">this</code> automatically to current function</li>
+            <li>Implicit returns</li>
+          </ul>
+				</section>
+
+				<section>
+					<h2>Arrow functions</h2>
+          <pre class="fragment"><code data-trim>
+// ES5
+var ages = [12,56,34,18,21,78];
+
+var underAge = ages.filter(function(age) {
+  if (age < 25) {
+    return true;
+  } else {
+    return false;
+  }
+});
+console.log(underAge);
+          </code></pre>
+          <pre class="fragment"><code data-trim>
+// ES6
+const ages = [12,56,34,18,21,78];
+
+const underAge = ages.filter(age => age < 25);
+console.log(underAge); // output [12,18,21]
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Default arguments</h2>
+          <p>You can now set default values for any argument</p>
+          <pre><code data-trim>
+function multiplyBy(number, factor = 10) {
+  return number * factor;
+}
+
+console.log(multiplyBy(5)); // outputs 50
+console.log(multiplyBy(5,2)); // outputs 10
+          </code></pre>
+				</section>
+
+				<section>
+					<h2>Template strings</h2>
+          <p>Evaluation of variables inside strings</p>
+          <div class="fragment">
+            <pre><code data-trim>
+// ES5
+var firstName = 'David';
+var lastName = 'Bowie';
+var fullName = "Hello my name is: " + firstName + " " + lastName;
+            </pre></code>
+          </div>
+          <div class="fragment">
+            <pre><code data-trim>
+// ES6
+const fullName = `Hello my name is: ${firstName} ${lastName}`;
+            </pre></code>
+            <ul class="list-spaced">
+            <li>Uses character <code class="invert">`</code> backtick</li>
+            <li>Supports multiline comments</li>
+            <li>Tagged templates also available, where you can run template string through a function first</li>
+            </ul>
+          </div>
+				</section>
+
+        <section>
+          <h2>New string methods</h2>
+          <p>Few extra functions that help out, without need to resort to regex</p>
+          <ul class="list-spaced">
+            <li><code class="invert">.startsWith</code></li>
+            <li><code class="invert">.endsWith</code></li>
+            <li><code class="invert">.includes</code></li>
+            <li><code class="invert">.repeat</code></li>
+          </ul>
+				</section>
+
+				<section>
+         <section>
+					<h2>Destructuring</h2>
+					<p>Allows us to extra data from Array/Objects into own variables<p>
+          <div class="fragment">
+            <p><b>Objects</b></p>
+            <pre><code data-trim>
+  const dog = {
+    name: "Ralph",
+    breed: "Border terrier",
+    age: 2,
+    sex: "M"
+  }
+
+  const {name, age} = dog;
+
+  console.log(name, age); // outputs Ralph, 2
+            </code></pre>
+          </div>
+				</section>
+
+			  <section>
+				  <h2>Destructuring</h2>
+          <div class="fragment">
+            <p><b>Arrays</b></p>
+            <pre><code data-trim>
+const item = ['PS4 console', '02345644', 349.99];
+const [name, sku, price] = item;
+
+// or you might get data as CSV
+const itemString = 'PS4 console,02345644,349.99';
+
+const [name, sku, price] = itemString.split(',');
+            </code></pre>
+         </section>
+      
+         <section>
+           <h2>Destructuring</h2>
+           <p>Can also destruct in function args</p>
+           <div class="fragment">
+             <pre><code data-trim>
+function renderName({title = 'Mr', first, last}) {
+  return `${title} ${first} ${last}`;
+}
+
+console.log(renderName({first: "Bob", last: "Dylan"}));
+             </code></pre>
+            </div>
+            <p>Lots more you can do with destructuring!</p>
+         </section>
+
+			  </section>
+        
+        <section>
+				  <h2>Iterables</h2>
+          <p>New <code class="invert">for..of</code> way to loop over iterables</p>
+          <div class="fragment">
+            <pre><code data-trim>
+const simpsons = ['Homer', 'Marge', 'Bart', 'Lisa', 'Maggie'];
+
+// ES5
+for (let i=0; i < simpsons.length; i++) {
+  console.log(simpsons[i]);
+}
+
+// ES6
+for (const simpson of simpson) {
+  console.log(simpson);
+}
+            </code></pre>
+            <p>For objects we need to stick with <code class="invert">for..in</code> until Object.entries/values is available in ES2017</p>
+          </div>
+        </section>
+
+			<section>
+				<h2>Array upgrades</h2>
+				<ul class="list-spaced">
+          <li><code class="invert">Array.from</code> - create Array from array-like objects</li>
+          <li><code class="invert">Array.of</code> - create Array from any number of arguments</li>
+          <li><code class="invert">Array.find</code> - find first item in Array that matches callback fn</li>
+          <li><code class="invert">Array.findIndex</code> - as .find except returns array index</li>
+          <li><code class="invert">Array.some</code> - check if <u>any</u> item in array matches callback fn</li>
+          <li><code class="invert">Array.every</code> - check if <u>every</u> item in array matches callback fn</li>
+				</ul>
+			</section>
+
+			<section>
+				<h2>Spread operator</h2>
+        <p>Take every item from an iterable object and apply to parent</p>
+        <div class="fragment">
+            <pre><code data-trim>
+const animals = ['Elephant', 'Lion', 'Rhino', 'Giraffe'];
+
+// copy array
+const africanAnimals = [...animals];
+
+// append arrays
+const ukAnimals = ['Dog', 'Cat', 'Cow'];
+
+const allAnimals = ukAnimals.concat(...africanAnimals);
+console.log(allAnimals); // outputs ["Dog", "Cat", "Cow", "Elephant", "Lion", "Rhino", "Giraffe"]
+
+// use spread to pass args
+function calcBill(amount, tax, tip) { // }
+var args = [20, 20, 10];
+const total = calcBill(...args);
+            </code></pre>
+            <p>The spread can also work with Object but this in next version of JS</p>
+        </div>
+				
+		  </section>
+
+      <section>
+        <h2>Rest operator</h2>
+        <p>Basically the opposite of spread it combines items into array</p>
+         <div class="fragment">
+            <pre><code data-trim>
+// use in function arguments to handle any number
+function suffixString(suffix, ...strings) {
+  console.log(strings);
+  return strings.map(string => `${string}${suffix}`);
+}
+
+const output = suffixString('ing', 'fly', 'wait', 'stir', 'stand');
+console.log(output); // ["flying", "waiting", "stiring", "standing"]
+
+// can also be used in destructuring
+const data = ['ing', 'fly', 'wait', 'stir', 'stand'];
+const [suffix, ...words] = data;
+            </code></pre>
+          </div>
+      </section>
+
+      <section>
+        <h2>Promises</h2>
+        <p class="fragment">Promises have been around for a while but its now a standard</p>
+        <p class="fragment">What is a promise? - it's a way to handle async and avoid callback hell!</p>
+        <p class="fragment">A promise represents a value that might be available now, or in the future, or never</p>
+        <p class="fragment">Can be chained together</p>
+        <div class="fragment">
+            <pre><code data-trim>
+const myPromise = fetch('http://yourserver/api/v2/articles');
+// try to resolve promise
+myPromise
+  .then(data => data.json())
+  .then(data => { console.log(data);})
+  .catch(err => { console.log(err);})            
+            </code></pre>
+        </div>
+      </section>
+    
+      <section>
+        <h2>Modules</h2>
+        <p>There have been various attempts at modules for JS but now there is a standard</p>
+        <p class="fragment"><b>What is a module?</b></p>
+        <div class="fragment">
+          <ul>
+            <li class="fragment">A way to share code in your application</li>
+            <li class="fragment">It's a file with one or more functions</li>
+            <li class="fragment">You can import functions from other modules</li>
+            <li class="fragment">You can export function from your modules</li>
+            <li class="fragment">Not supported in browser/node so must be transpiled</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>Modules - example</h2>
+        <pre><code data-trim>
+// doStuff.js
+import slug from 'slug'; // default import
+import { findKey } from 'lodash'; // named import
+
+export const foo = 123;
+
+function doStuff() {}
+
+export default doStuff;
+
+// app.js
+import doStuff from './src/modules/doStuff'; // local file import
+
+doStuff();
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>More things....</h2>
+        <p>Examples of the other additions in ES6, but not looked into yet.</p>
+        <ul>
+          <li>Generators</li>
+          <li>Proxies</li>
+          <li>Sets / WeakSets</li>
+          <li>Maps / WeakMaps</li>
+          <li>Symbol type</li>
+        </ul>
+      </section>
+
+		  <section>
+					<h1>&lt;/talk&gt;</h1>
+				</section>
+
+			<section>
+				<h2>Questions?</h2>
+				<p><img src="img/question.jpg" alt="Questions"/></p>
+				<p>
+					<small><a href="https://github.com/gunnx/slides/tree/master/es6">Slides (Github)</a></small>
+				</p>
+			</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
